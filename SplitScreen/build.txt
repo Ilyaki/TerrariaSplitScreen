@@ -10,3 +10,4 @@ languageVersion = 6
 includePDB = true
 dllReferences = 0Harmony
 side = Client
+homepage = https://github.com/Ilyaki/TerrariaSplitScreen/wiki

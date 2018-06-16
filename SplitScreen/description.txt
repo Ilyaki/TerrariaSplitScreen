@@ -1,1 +1,2 @@
-﻿Adds split screen multiplayer up to 5 players with gamepads
+﻿Adds split screen multiplayer up to 5 players with gamepads and a keyboard+mouse.
+Please visit the mod page for installation instructions.
