@@ -1,0 +1,12 @@
+﻿author = ilyaki
+version = 1.0.0
+displayName = Split Screen
+homepage = 
+hideCode = false
+hideResources = false
+includeSource = false
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+languageVersion = 6
+includePDB = true
+dllReferences = 0Harmony
+side = Client

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitScreen", "SplitScreen\SplitScreen.csproj", "{0245A4D7-2F69-4A40-9D1B-21E1CFF89F2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0245A4D7-2F69-4A40-9D1B-21E1CFF89F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0245A4D7-2F69-4A40-9D1B-21E1CFF89F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0245A4D7-2F69-4A40-9D1B-21E1CFF89F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0245A4D7-2F69-4A40-9D1B-21E1CFF89F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {585A4A0F-B6FE-4407-86FD-627BBAD4DE75}
+	EndGlobalSection
+EndGlobal
