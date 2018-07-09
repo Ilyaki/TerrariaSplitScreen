@@ -1,5 +1,5 @@
 # TerrariaSplitScreen
 
-Enables split screen in Terraria with up to 5 players. (4 gamepads, 1 keyboard+mouse)
+Enables split screen in Terraria with multiple gamepads and/or multiple keyboards/mice
 
 Requries tModLoader
