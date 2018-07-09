@@ -1,5 +1,8 @@
 ﻿using Harmony;
 using Microsoft.Xna.Framework;
+using SplitScreen.Keyboards.SplitScreen.Keyboards;
+using SplitScreen.Mice;
+using SplitScreen.UI;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,66 +13,62 @@ namespace SplitScreen
 {
 	public class SplitScreenMod : Mod
 	{
-		private DeviceSelectorUI deviceSelectorUI;
-		private UserInterface deviceSelectorInterface;
+		public static Events Events { get; private set; }
+
+		private MultipleKeyboardManager keyboardManager;
+		private MultipleMiceManager miceManager;
+
+		private UIController uiController;
+
+		private ToggleBorders toggleBorders;
 
 		public override void Load()
 		{
 			Monitor.Log("Loading...");
-			
+
+			Events = new Events();
+
 			//Disables FPS throttling when window is unfocused
 			Terraria.Main.instance.InactiveSleepTime = new TimeSpan(0);
 
-			HarmonyInstance harmony = HarmonyInstance.Create("me.ilyaki.terrariaSplitScreen");
-			harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-			//UI
-			deviceSelectorUI = new DeviceSelectorUI();
-			deviceSelectorUI.Activate();
-			deviceSelectorUI.IsActive = false;
-			deviceSelectorInterface = new UserInterface();
-			deviceSelectorInterface.SetState(deviceSelectorUI);
-
-			Terraria.Main.OnTick += OnTick;
+			//Make sure it doesnt start in borderless fullscreen
+			Terraria.Main.screenBorderless = false;
+			SplitScreen.Events.QuitGame += (o, e) => Terraria.Main.screenBorderless = false;
+			toggleBorders = new ToggleBorders();
 			
-			base.Load();
-		}
+			SplitScreen.Events.SecondaryLoad += delegate {
+				//Multiple keyboard/mice
+				keyboardManager = new MultipleKeyboardManager();
+				miceManager = new MultipleMiceManager();
+				miceManager.RegisterMice();
 
-		private bool oldIsConnected = false;
-		private void OnTick()
-		{
-			if (!oldIsConnected && Utility.IsConnectedToAServer())
-			{
-				Monitor.Log("Activating UI");
-				deviceSelectorUI.IsActive = true;
-				Terraria.Main.blockInput = true;
+				uiController = new UIController(keyboardManager, miceManager);
+				
+				Events.PreUpdate += OnPreUpdate;
+			};
+
+			try {
+				HarmonyInstance harmony = HarmonyInstance.Create("me.ilyaki.terrariaSplitScreen");//Run AFTER subscribing to Events
+				harmony.PatchAll(Assembly.GetExecutingAssembly());
+			}catch (Exception) {
+				Monitor.Log("Could not patch with Harmony. This is probably because of a mod reload instead of a fresh restart");
 			}
-			oldIsConnected = Utility.IsConnectedToAServer();
 		}
 		
-		public override void UpdateUI(GameTime gameTime)
+		private bool oldIsConnected = false;
+		private void OnPreUpdate(object sender, EventArgs args)
 		{
-			if (deviceSelectorUI.IsActive) deviceSelectorInterface.Update(gameTime);
-		}
+			if (!oldIsConnected && Utility.IsConnectedToAServer())
+				uiController.ActivateUI();
+			oldIsConnected = Utility.IsConnectedToAServer();
 
-		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-		{
-			if (deviceSelectorUI.IsActive)
-			{
-				int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-				if (MouseTextIndex != -1)
-				{
-					layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
-					"SplitScreen: DeviceSelector",
-					delegate
-					{
-						deviceSelectorUI.Draw(Terraria.Main.spriteBatch);
-						return true;
-					},
-					InterfaceScaleType.UI)
-				);
-				}
-			}
+			toggleBorders.Update();
+
+			miceManager.Update();
 		}
+		
+		public override void UpdateUI(GameTime gameTime) => uiController?.UpdateUI(gameTime);
+
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) => uiController?.ModifyInterfaceLayers(layers);
 	}
 }
