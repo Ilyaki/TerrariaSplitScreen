@@ -1,2 +1,7 @@
-﻿Adds split screen multiplayer up to 5 players with gamepads and a keyboard+mouse.
+﻿(NOW WITH MULTIPLE KEYBOARDS/MICE!)
+Adds split screen multiplayer with gamepads and multiple keyboards/mice
 Please visit the mod page for installation instructions.
+
+Check the mod homepage if you have any issues setting up multiple keyboards/mice
+
+Mac/Linux users please use version 1.0.1: Version 2.0.0+ will not work!

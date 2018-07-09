@@ -12,6 +12,8 @@ namespace SplitScreen
 	[HarmonyPatch(new Type[] { typeof(GameTime) })]
 	public class Main_Update_Patcher
 	{
+		private static bool hasSecondaryLoaded = false;
+
 		public static bool Prefix(GameTime gameTime)
 		{
 			if (Utility.IsConnectedToAServer())
@@ -19,6 +21,14 @@ namespace SplitScreen
 				Terraria.Main.instance.SetPrivateFieldValue("isActive", true);
 				Terraria.Main.hasFocus = true;
 				Terraria.Main.gameInactive = false;
+			}
+
+			SplitScreenMod.Events.OnPreUpdate(null);
+
+			if (!hasSecondaryLoaded)
+			{
+				hasSecondaryLoaded = true;
+				SplitScreenMod.Events.OnSecondaryLoad(null);
 			}
 
 			return true;

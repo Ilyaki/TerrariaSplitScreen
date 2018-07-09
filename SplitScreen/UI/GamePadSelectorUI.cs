@@ -1,13 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SplitScreen.UI;
+using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 namespace SplitScreen
 {
-	class DeviceSelectorUI : UIState
+	class GamePadSelectorUI : UIState, IActiveUI
 	{
-		public bool IsActive { get; set; } = true;	
+		private bool isActive = true;
+		public bool IsActive
+		{
+			get { return isActive; }
+			set
+			{
+				if (isActive && !value)
+					OnDeactivated?.Invoke(this, null);
+				isActive = value;
+			}
+		}
+
+		public event EventHandler OnDeactivated;
 
 		private UIPanel backPanel;
 		const int panelWidth = 400;
@@ -19,6 +33,12 @@ namespace SplitScreen
 
 		private UITextPanel<string> finishButton;
 
+
+		public void RecalculatePositions()
+		{
+			backPanel.Left.Set(Terraria.Main.instance.GraphicsDevice.Viewport.Bounds.Width / 2 - panelWidth / 2, 0f);
+			backPanel.Top.Set(Terraria.Main.instance.GraphicsDevice.Viewport.Bounds.Height / 2 - panelHeight / 2, 0f);
+		}
 
 		public override void OnInitialize()
 		{
@@ -57,12 +77,11 @@ namespace SplitScreen
 			finishButton.OnClick += FinishButtonClicked;
 			backPanel.Append(finishButton);
 		}
-		
+
 		private void FinishButtonClicked(UIMouseEvent evt, UIElement listeningElement)
 		{
 			Terraria.Main.PlaySound(10);
 			IsActive = false;
-			Terraria.Main.blockInput = false;
 		}
 
 		private void ChangedButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -81,8 +100,14 @@ namespace SplitScreen
 			{
 				Terraria.Main.LocalPlayer.mouseInterface = true;
 			}
-			
+
 			base.DrawSelf(spriteBatch);
+		}
+
+		public override void Update(GameTime gameTime)
+		{
+			Terraria.Main.blockInput = IsActive;
+			base.Update(gameTime);
 		}
 	}
 }

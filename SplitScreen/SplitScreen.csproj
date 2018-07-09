@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SplitScreen</RootNamespace>
     <AssemblyName>SplitScreen</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,10 +31,32 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>6</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoHotkeyInterop">
+      <HintPath>lib\AutoHotkeyInterop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -51,8 +74,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\DLLs\XNA\Microsoft.Xna.Framework.Xact.dll</HintPath>
     </Reference>
+    <Reference Include="RawInput, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\RawInput.dll</HintPath>
+    </Reference>
+    <Reference Include="RawInputSharp, Version=1.0.6721.35761, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\RawInputSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -66,9 +98,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputDisabler.cs" />
+    <Compile Include="Mice\MultipleMiceManager.cs" />
+    <Compile Include="Patchers\Main_QuitGame_Patcher.cs" />
+    <Compile Include="ToggleBorders.cs" />
+    <Compile Include="UI\AttachKeyboardUI.cs" />
+    <Compile Include="UI\IActiveUI.cs" />
+    <Compile Include="UI\AttachMouseUI.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Keyboards\KeyStateStore.cs" />
+    <Compile Include="Keyboards\MultipleKeyboardManager.cs" />
     <Compile Include="Patchers\Keyboard_GetState_Patcher.cs" />
     <Compile Include="Tools\AccessExtensions.cs" />
-    <Compile Include="DeviceSelectorUI.cs" />
+    <Compile Include="UI\GamePadSelectorUI.cs" />
     <Compile Include="Patchers\GamePad_GetState_Patcher.cs" />
     <Compile Include="Patchers\Main_Update_Patcher.cs" />
     <Compile Include="Patchers\Mouse_GetState_Patcher.cs" />
@@ -77,6 +119,8 @@
     <Compile Include="Monitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Utility.cs" />
+    <Compile Include="UI\LockMouseUI.cs" />
+    <Compile Include="UI\UIController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="build.txt" />
