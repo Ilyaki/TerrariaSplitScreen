@@ -106,7 +106,7 @@ namespace SplitScreen
 
 		public override void Update(GameTime gameTime)
 		{
-			Terraria.Main.blockInput = IsActive;
+			//Terraria.Main.blockInput = IsActive;
 			base.Update(gameTime);
 		}
 	}
