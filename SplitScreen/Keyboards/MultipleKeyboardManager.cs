@@ -34,9 +34,14 @@ namespace SplitScreen.Keyboards
 			}
 			public static bool HasAttachedKeyboard() => !String.IsNullOrWhiteSpace(attachedKeyboardID);
 
-			private static KeyboardState? oldAttachedKeyboardState;
+			//private static KeyboardState? oldAttachedKeyboardState;
 
 			public MultipleKeyboardManager()
+			{
+				
+			}
+
+			public void Initialize()
 			{
 				RawInput rawinput = new RawInput(Terraria.Main.instance.Window.Handle, false);
 				rawinput.KeyPressed += OnKeyPressed;
@@ -75,7 +80,7 @@ namespace SplitScreen.Keyboards
 				oldKeyboardStates.Clear();
 				foreach (var k in keyboardsKeyStores) oldKeyboardStates.Add(k.Key, k.Value.GetKeyboardState());
 
-				oldAttachedKeyboardState = Keyboard.GetState();
+				//oldAttachedKeyboardState = Keyboard.GetState();
 			}
 			#endregion
 
@@ -115,6 +120,9 @@ namespace SplitScreen.Keyboards
 				return null;
 			}
 
+			public static KeyboardState? GetAllCombinedKeyboardState() =>
+				new KeyboardState(keyboardsKeyStores?.Values.SelectMany(x => x.GetPressedKeys()).ToArray());
+
 			public static IEnumerable<Keys> GetAnyPressedKeys()
 			{
 				IEnumerable<Keys> keys = new List<Keys>();
@@ -125,7 +133,7 @@ namespace SplitScreen.Keyboards
 				return keys;
 			}
 
-			public static bool WasKeyJustPressed(Keys key)
+			/*public static bool WasKeyJustPressed(Keys key)
 			{
 				if (String.IsNullOrWhiteSpace(attachedKeyboardID))
 					return Utility.TrueIsWindowActive() && Keyboard.GetState().IsKeyDown(key) && oldAttachedKeyboardState?.IsKeyUp(key) == true;
@@ -134,7 +142,7 @@ namespace SplitScreen.Keyboards
 					KeyboardState oldKeyboardState;
 					return oldKeyboardStates.TryGetValue(attachedKeyboardID, out oldKeyboardState) && (GetAttachedKeyboardState() ?? new KeyboardState()).IsKeyDown(key) && oldKeyboardState.IsKeyUp(key);
 				}
-			}
+			}*/
 
 			/// <summary>
 			/// Returns true if found a keyboard

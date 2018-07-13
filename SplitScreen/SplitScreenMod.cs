@@ -15,8 +15,8 @@ namespace SplitScreen
 	{
 		public static Events Events { get; private set; }
 
-		private MultipleKeyboardManager keyboardManager;
-		private MultipleMiceManager miceManager;
+		private MultipleKeyboardManager keyboardManager = null;
+		private MultipleMiceManager miceManager = null;
 
 		private UIController uiController;
 
@@ -47,6 +47,12 @@ namespace SplitScreen
 				Events.PreUpdate += OnPreUpdate;
 			};
 
+			SplitScreen.Events.JoinedServer += delegate
+			{
+				uiController.ActivateUI();
+				keyboardManager.Initialize();
+			};
+
 			try {
 				HarmonyInstance harmony = HarmonyInstance.Create("me.ilyaki.terrariaSplitScreen");//Run AFTER subscribing to Events
 				harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -55,16 +61,10 @@ namespace SplitScreen
 			}
 		}
 		
-		private bool oldIsConnected = false;
 		private void OnPreUpdate(object sender, EventArgs args)
-		{
-			if (!oldIsConnected && Utility.IsConnectedToAServer())
-				uiController.ActivateUI();
-			oldIsConnected = Utility.IsConnectedToAServer();
-
+		{			
 			toggleBorders.Update();
-
-			miceManager.Update();
+			miceManager?.Update();
 		}
 		
 		public override void UpdateUI(GameTime gameTime) => uiController?.UpdateUI(gameTime);
